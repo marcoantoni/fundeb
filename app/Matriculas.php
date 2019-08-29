@@ -14,8 +14,9 @@ class Matriculas extends Model {
     	return DB::select($sql);
     }
 
-    public static function getMatriculasEstado($id_estado){
-    	$sql = "SELECT SUM(quantidade) AS quantidade, modalidades.nome FROM matriculas, segmentos, modalidades WHERE matriculas.id_estado = $id_estado AND matriculas.id_segmento = segmentos.id AND segmentos.id_modalidade = modalidades.id GROUP BY modalidades.nome ORDER BY nome ASC";
+    public static function getIndicadores($id_municipio){
+    	$sql = "SELECT SUM(quantidade) AS quantidade, modalidades.nome FROM matriculas, segmentos, modalidades WHERE matriculas.id_municipio = $id_municipio AND matriculas.id_segmento = segmentos.id AND segmentos.id_modalidade = modalidades.id GROUP BY modalidades.nome ORDER BY nome ASC";
     	return DB::select($sql);
-    }
+    }    
+
 }
