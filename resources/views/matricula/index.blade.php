@@ -86,7 +86,7 @@
     </div>
 </div>
 
-<table id="table" class="highlight striped responsive-table">
+<table id="table" class="row-border">
   <thead>
     <tr>
       <th>TIPO</th>
@@ -206,6 +206,11 @@
   $(document).ready(function(){
     $('table').hide();
     $('#cards').hide();
+    $('#table').DataTable({
+      pagging: false
+    });
   });
 </script>
+<script src="{{ url('/') }}/js/jquery.dataTables.min.js"></script>
+<link type="text/css" rel="stylesheet" href="{{ url('/') }}/css/jquery.dataTables.min.css">
 @endsection
