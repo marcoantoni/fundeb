@@ -70,14 +70,14 @@
       <div class="container">
         <div class="row">
           <div class="col l6 s12">
-            <h5 class="white-text">Company Bio</h5>
-            <p class="grey-text text-lighten-4">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
+            <h5 class="white-text">O que é o FUNDEB?</h5>
+            <p class="grey-text text-lighten-4">O Fundo de Manutenção e Desenvolvimento da Educação Básica e de Valorização dos Profissionais da Educação (Fundeb) atende toda a educação básica, da creche ao ensino médio. Substituto do Fundo de Manutenção e Desenvolvimento do Ensino Fundamental e de Valorização do Magistério (Fundef), que vigorou de 1997 a 2006, o Fundeb está em vigor desde janeiro de 2007 e se estenderá até 2020.</p>
+            <a class="white-text" href="http://portal.mec.gov.br/fundeb">Para mais detalhes</a></li>
           </div>
           <div class="col l3 s12">
-            <h5 class="white-text">Settings</h5>
+            <h5 class="white-text">Origem dos dados</h5>
             <ul>
-            <li><a class="white-text" href="#!">Link 1</a></li>
-            <li><a class="white-text" href="#!">Link 2</a></li>
+            <li><a class="white-text" href="https://www.fnde.gov.br/index.php/financiamento/fundeb/area-para-gestores/dados-estatisticos">Dados estatistícos</a></li>
             <li><a class="white-text" href="#!">Link 3</a></li>
             <li><a class="white-text" href="#!">Link 4</a></li>
             </ul>
