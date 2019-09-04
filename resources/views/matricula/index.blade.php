@@ -34,7 +34,7 @@
       <div class="card blue-grey darken-1">
         <div class="card-content white-text">
           <p>Educação infantil</p>
-          <h3 id="matriculasedinfantil"></h3>
+          <h4 id="matriculasedinfantil"></h4>
           <p>Matrículas</p>
         </div>
       </div>
@@ -43,7 +43,7 @@
       <div class="card blue-grey darken-1">
         <div class="card-content white-text">
           <p>Ensino fundamental</p>
-          <h3 id="matriculasedfundamental"></h3>
+          <h4 id="matriculasedfundamental"></h4>
           <p>Matrículas</p>
         </div>
       </div>
@@ -52,7 +52,7 @@
       <div class="card blue-grey darken-1">
         <div class="card-content white-text">
           <p>EJA</p>
-          <h3 id="matriculaseja"></h3>
+          <h4 id="matriculaseja"></h4>
           <p>Matrículas</p>
         </div>
       </div>
@@ -61,7 +61,7 @@
       <div class="card blue-grey darken-1">
         <div class="card-content white-text">
           <p>AEE</p>
-          <h3 id="matriculasaee"></h3>
+          <h4 id="matriculasaee"></h4>
           <p>Matrículas</p>
         </div>
       </div>
@@ -70,7 +70,7 @@
       <div class="card blue-grey darken-1">
         <div class="card-content white-text">
           <p>Educação especial</p>
-          <h3 id="matriculasedespecial"></h3>
+          <h4 id="matriculasedespecial"></h4>
           <p>Matrículas</p>
         </div>
       </div>
@@ -79,7 +79,7 @@
       <div class="card blue-grey darken-1">
         <div class="card-content white-text">
           <p>Estimativa receitas</p>
-          <h3 id="estimativareceitas"></h3>
+          <h4 id="estimativareceitas"></h4>
           <p>reais</p>
         </div>
       </div>
@@ -98,38 +98,24 @@
 
   <tbody id="tbody"></tbody>
 </table>
-
-
-<style>
-  .modal {
-    width: 100%;
-    height: 100%;
-  }
-  iframe {
-    border: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
 <script>
   // ao selecionar o estado
+  // busca as cidades deste estado e adiciona ao select
   $( '#estados' ).change(function() {
     $('table').show();
     $('#tbody').empty();
+    // busca os dados relativos ao estado
     buscarDados($('select[name=estados]').val(), 'E');
 
     $('#municipios').empty();
-    $('#municipios').append('<option value="">Selecione</option>');
+    $('#municipios').append('<option value="" disabled selected>Selecione</option>');
     var id_estado = $('select[name=estados]').val();
+    var url = '{{ url("/municipios") }}/' + id_estado;
     $.ajax({
-      type: "GET",
-      url: "http://127.0.0.1:8000/municipios/"+id_estado,
-      contentType: "application/json",
-      dataType: "json",
+      type: 'GET',
+      url: url,
+      contentType: 'application/json',
+      dataType: 'json',
     })
     .done(function(data) {
       $.each( data, function( key, value ) {
@@ -138,32 +124,33 @@
     });
   });
 
+  // ao selecionar o municipio
   $( '#municipios' ).change(function() {
     $('table').show();
     $('#tbody').empty();
+    // busca os dados relativos ao municipio selecionado
     buscarDados($('select[name=municipios]').val(), 'M');
   });
 
-  // gera a tabela e preenche os dados
-  // id pode ser: id_municipio ou id_estado
+  /**
+  * Description               Busca as matriculas e preenche a tabela html
+  * @param {int} id           id do municipio ou estado
+  * @param {char} cod         'E' refere-se a estado e 'M' municipio
+  * @return {void}            
+  */
   function buscarDados(id, cod){
-    if (cod === 'M'){
-      var url = 'http://127.0.0.1:8000/matricula/' + id;
-      console.log('municipios');
-    } else {
-      var url = 'http://127.0.0.1:8000/matricula/' + id + '/estado';
-      console.log('estado');
+    var url = '{{ url("/matricula") }}/' + id;;
+    if (cod === 'E'){
+      url += '/estado';
     }
-    console.log('url: ' + url);
+    
     $.ajax({
-      type: "GET",
+      type: 'GET',
       url: url,
-      contentType: "application/json",
-      dataType: "json",
+      contentType: 'application/json',
+      dataType: 'json',
     })
     .done(function(data) {
-      console.log('ajax sucess');
-      console.log('dados' + data);
       $.each( data, function( key, value ) {
         var linha = '<tr>';
         linha += '<td>' + value.nome + '</td>';
@@ -189,14 +176,9 @@
 
         $('#table tbody').append(linha);
       });
+      
       //preencher cards
-       if (cod === 'M'){
-        var url = '{{ url("/matricula/indicadores") }}' + '/' + id;
-      } else {
-        var url = '{{ url("/matricula/indicadores") }}' + '/' + id + '/estado';
-      }
 
-      console.log("url cards " + url);
       // limpando cards
       $('#matriculasaee').empty();
       $('#matriculasedespecial').empty();
@@ -204,6 +186,11 @@
       $('#matriculaseja').empty();
       $('#matriculasedfundamental').empty();
       $('#matriculasensmedio').empty();
+      
+      var url = '{{ url("/matricula/indicadores") }}/' + id;
+      if (cod === 'E')
+        url += '/estado';
+      
       $.ajax({
           type: 'GET',
           url: url,
@@ -224,11 +211,6 @@
   $(document).ready(function(){
     $('table').hide();
     $('#cards').hide();
-    $('#table').DataTable({
-      pagging: false
-    });
   });
 </script>
-<script src="{{ url('/') }}/js/jquery.dataTables.min.js"></script>
-<link type="text/css" rel="stylesheet" href="{{ url('/') }}/css/jquery.dataTables.min.css">
 @endsection

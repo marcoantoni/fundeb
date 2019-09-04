@@ -43,44 +43,15 @@
 
   <tbody id="tbody"></tbody>
 </table>
-
-
-<style>
-  .modal {
-    width: 100%;
-    height: 100%;
-  }
-  iframe {
-    border: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
 <script>
   // ao selecionar o estado
+  // busca as cidades deste estado e adiciona ao select
   $( '#estados' ).change(function() {
     $('table').show();
     $('#tbody').empty();
+    // busca os dados relativos ao estado
     buscarDados($('select[name=estados]').val(), $('select[name=ano]').val());
 
-    /*$('#municipios').empty();
-    $('#municipios').append('<option value="" disabled selected>Selecione</option>');
-    var id_estado = $('select[name=estados]').val();
-    $.ajax({
-      type: "GET",
-      url: "http://127.0.0.1:8000/municipios/"+id_estado,
-      contentType: "application/json",
-      dataType: "json",
-    })
-    .done(function(data) {
-      $.each( data, function( key, value ) {
-        $('#municipios').append('<option value="'+value.id+'">'+value.nome+'</option>');
-      });
-    });*/
   });
 
   $( '#ano' ).change(function() {
@@ -89,17 +60,21 @@
     buscarDados($('select[name=estados]').val(), $('select[name=ano]').val());
   });
 
-  // gera a tabela e preenche os dados
-  // id pode ser: id_municipio ou id_estado
+  /**
+  * Description               Busca a estimativa de valor gasto por aluno e preenche a tabela html
+  * @param {int} id_estado    id do estado
+  * @param {int} ano          ano que esta se buscando as informações
+  * @return {void}            
+  */
   function buscarDados(id_estado, ano){
     
-    var url = 'http://127.0.0.1:8000/estimativas/' + id_estado + '/ano/' + ano;    
+    var url = '{{ url("/estimativas") }}/' + id_estado + '/ano/' + ano;    
     console.log('url: ' + url);
     $.ajax({
-      type: "GET",
+      type: 'GET',
       url: url,
-      contentType: "application/json",
-      dataType: "json",
+      contentType: 'application/json',
+      dataType: 'json',
     })
     .done(function(data) {
       console.log('ajax sucess');
