@@ -22,7 +22,10 @@ Route::resource('matricula', 'MatriculaController');
 
 // só usada para obter os estados
 Route::resource('estados', 'EstadoController');
-Route::resource('estimativas', 'EstimativaController');
+
+Route::get('/estimativas/', 'EstimativaController@index'); 
+Route::get('/estimativas/{id_estado}/ano/{ano}', 'EstimativaController@show'); 
+
 
 Route::get('/despesa/relatorio/{id}', 'DespesaController@getRelatorio');
 
