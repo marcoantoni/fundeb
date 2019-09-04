@@ -10,7 +10,7 @@ class Estimativa extends Model {
     public $timestamps = false;
 
     public static function getEstimativas($id_estado){
-    	$sql = "SELECT VLestimadoAluno.valor, VLestimadoAluno.educacao, VLestimadoAluno.tipo, modalidades.nome AS modalidade, segmentos.nome AS segmento FROM VLestimadoAluno, segmentos, modalidades, estados WHERE VLestimadoAluno.id_estados = estados.id AND VLestimadoAluno.id_segmento = segmentos.id AND segmentos.id_modalidade = modalidades.id";
+    	$sql = "SELECT VLestimadoAluno.valor, VLestimadoAluno.educacao, VLestimadoAluno.tipo, modalidades.nome AS modalidade, segmentos.nome AS segmento FROM VLestimadoAluno, segmentos, modalidades WHERE VLestimadoAluno.id_estado = $id_estado AND VLestimadoAluno.id_segmento = segmentos.id AND segmentos.id_modalidade = modalidades.id ORDER BY VLestimadoAluno.id ASC";
     	return DB::select($sql);
     }
 
