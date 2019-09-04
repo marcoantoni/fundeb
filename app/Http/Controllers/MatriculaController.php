@@ -23,6 +23,10 @@ class MatriculaController extends Controller {
     	return Matriculas::getIndicadores($id);
     }
 
+    public function getIndicadoresEstado($id){
+        return Matriculas::getIndicadoresEstado($id);
+    }
+
     public function getMatriculasEstados($id_estado){
     	return Matriculas::getMatriculasEstados($id_estado);
     }

@@ -27,4 +27,5 @@ Route::resource('estimativas', 'EstimativaController');
 Route::get('/despesa/relatorio/{id}', 'DespesaController@getRelatorio');
 
 Route::get('/matricula/indicadores/{id}', 'MatriculaController@getIndicadores');
-Route::get('matricula/{id_estado}/estado', 'MatriculaController@getMatriculasEstado');
+Route::get('/matricula/indicadores/{id}/estado', 'MatriculaController@getIndicadoresEstado');
+Route::get('matricula/{id_estado}/estado', 'MatriculaController@getMatriculasEstados');

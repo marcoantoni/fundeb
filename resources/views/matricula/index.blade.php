@@ -118,8 +118,12 @@
 <script>
   // ao selecionar o estado
   $( '#estados' ).change(function() {
+    $('table').show();
+    $('#tbody').empty();
+    buscarDados($('select[name=estados]').val(), 'E');
 
     $('#municipios').empty();
+    $('#municipios').append('<option value="">Selecione</option>');
     var id_estado = $('select[name=estados]').val();
     $.ajax({
       type: "GET",
@@ -137,12 +141,20 @@
   $( '#municipios' ).change(function() {
     $('table').show();
     $('#tbody').empty();
-    buscarDados($('select[name=municipios]').val());
+    buscarDados($('select[name=municipios]').val(), 'M');
   });
 
   // gera a tabela e preenche os dados
-  function buscarDados(id_municipio){
-    var url = 'http://127.0.0.1:8000/matricula/' + id_municipio;
+  // id pode ser: id_municipio ou id_estado
+  function buscarDados(id, cod){
+    if (cod === 'M'){
+      var url = 'http://127.0.0.1:8000/matricula/' + id;
+      console.log('municipios');
+    } else {
+      var url = 'http://127.0.0.1:8000/matricula/' + id + '/estado';
+      console.log('estado');
+    }
+    console.log('url: ' + url);
     $.ajax({
       type: "GET",
       url: url,
@@ -151,6 +163,7 @@
     })
     .done(function(data) {
       console.log('ajax sucess');
+      console.log('dados' + data);
       $.each( data, function( key, value ) {
         var linha = '<tr>';
         linha += '<td>' + value.nome + '</td>';
@@ -177,7 +190,12 @@
         $('#table tbody').append(linha);
       });
       //preencher cards
-      var url = '{{ url("/matricula/indicadores") }}' + '/' + id_municipio;
+       if (cod === 'M'){
+        var url = '{{ url("/matricula/indicadores") }}' + '/' + id;
+      } else {
+        var url = '{{ url("/matricula/indicadores") }}' + '/' + id + '/estado';
+      }
+
       console.log("url cards " + url);
       // limpando cards
       $('#matriculasaee').empty();
