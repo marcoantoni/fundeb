@@ -209,6 +209,7 @@
     });
   }
   $(document).ready(function(){
+    $('#matriculas').addClass('active');
     $('table').hide();
     $('#cards').hide();
   });

@@ -110,6 +110,7 @@
     });
   }
   $(document).ready(function(){
+    $('#estimativa').addClass('active');
     $('table').hide();
   });
 </script>

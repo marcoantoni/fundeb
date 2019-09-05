@@ -33,8 +33,9 @@
         <div class="nav-wrapper container">
           <!-- <a href="#!" class="brand-logo">Logo</a>-->
           <ul class="left hide-on-med-and-down">
-            <li><a href="{{ URL::route('matricula.index') }}">Matrículas</a></li>
-            <li><a href="{{ URL::route('despesa.index') }}">Acompanhar gastos</a></li>
+            <li id="matriculas"><a href="{{ url('/matricula') }}">Matrículas</a></li>
+            <li id="acompanhargastos"><a href="{{ url('/despesa') }}">Acompanhar gastos</a></li>
+            <li id="estimativa"><a href="{{ url('/estimativas') }}">Estimativa de valor por aluno</a></li>
             <!-- Dropdown Trigger -->
             <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
           </ul>
@@ -83,12 +84,9 @@
             </ul>
           </div>
           <div class="col l3 s12">
-            <h5 class="white-text">Connect</h5>
+            <h5 class="white-text">Contribua</h5>
             <ul>
-              <li><a class="white-text" href="#!">Link 1</a></li>
-              <li><a class="white-text" href="#!">Link 2</a></li>
-              <li><a class="white-text" href="#!">Link 3</a></li>
-              <li><a class="white-text" href="#!">Link 4</a></li>
+              <li><a class="white-text" href="https://github.com/marcoantoni/fundeb/">GitHub</a></li>
             </ul>
           </div>
         </div>
