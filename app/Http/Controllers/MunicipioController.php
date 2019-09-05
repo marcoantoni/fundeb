@@ -9,17 +9,15 @@ use App\Estados;
 use App\Municipios;
 
 class MunicipioController extends Controller {
-	public function index(){
-        $estados = Estados::orderBy("nome", "ASC")->get();
-		return view("municipio/index")->with(["estados" => $estados]);
-	}
 
-    public function getMunicipios($id) {
+    /**
+    * Retorna todas as cidades de um estado do Brasil
+    *
+    * @param integer $id id_estado - primary key da tabela estados
+    * @return json
+    */ 
+    public function show($id) {
     	return Municipios::where("id_estado", $id)->get();
     }
 
-    // $id e o cod_municipio_ibge
-    public function getRelatorio($id){
-    	return Despesas::where("co_municipio_ibge", $id)->where("NU_PERIODO", 6)->get();
-    }
 }
