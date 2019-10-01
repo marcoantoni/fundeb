@@ -11,6 +11,7 @@
 |
 */
 
+Route::get('/', 'MatriculaController@index');
 
 // rota para obter os todos os municipios de um estado
 Route::get('municipios/{id}', 'MunicipioController@show');
@@ -18,11 +19,11 @@ Route::get('municipios/{id}', 'MunicipioController@show');
 Route::resource('despesa', 'DespesaController');
 
 
+Route::get('estimativas/', 'EstimativaController@index');
+Route::get('estimativas/graficos/{id_estado?}/{ano?}/{modalidade?}', 'EstimativaController@graficos');
+// grafico de acompanhamento geral
+//Route::get('estimativas/graficosgeral/{id_estado?}', 'EstimativaController@graficoComparacaoAnual');
 
-// só usada para obter os estados
-//Route::get('estados/{id}', 'EstadoController@show');
-
-Route::get('estimativas/', 'EstimativaController@index'); 
 Route::get('estimativas/{id_estado}/ano/{ano}', 'EstimativaController@show'); 
 
 

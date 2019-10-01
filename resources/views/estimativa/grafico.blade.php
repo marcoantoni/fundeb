@@ -12,27 +12,31 @@
 <form action="#">
   <div class="row">
     <div class="input-field col s12 m4">
-      <select id="estados" name="estados" class="browser-default">
+      <select id="estados" name="estados">
         <option value="" disabled selected>Escolha o estado</option>
         @foreach($estados AS $estado)
           <option value="{{ $estado->id }}">{{ $estado->nome }}</option>
         @endforeach
       </select>
+      <label>Estado</label>
     </div>
     <div class="input-field col s12 m4">
-      <select id="modalidade" name="modalidade" class="browser-default">
+      <select id="modalidade" name="modalidade">
         <option value="" disabled selected>Escolha a modalidade</option>
         @foreach($modalidades AS $modalidade)
           <option value="{{$modalidade->id}}">{{$modalidade->nome}}</option>
         @endforeach
       </select>
+      <label>Modalidade</label>
     </div>
     <div class="input-field col s12 m4">
-      <select id="ano" name="ano" class="browser-default">
+      <select id="ano" name="ano">
+          <option value="0">Todos</option>
         @foreach($anos AS $ano)
           <option value="{{$ano->ano}}">{{$ano->ano}}</option>
         @endforeach
       </select>
+      <label>Ano</label>
       </div>
     </div>
 </form>
@@ -63,46 +67,80 @@
   * @return {void}            
   */
   function buscarDados(id_estado, id_modalidade, ano){
+
     var graficos = Highcharts.chart('graficos', {
-      chart: {
-          type: 'bar'
-      },
       title: {
-          text: 'Comparação do investimento estimado por estudante'
+        text: 'Valor gasto por aluno de acordo com a modalidade educacional'
       },
+
       yAxis: {
-          title: {
-              text: 'R$'
-          }
+        title: {
+          text: 'Valor investido - R$'
+        }
       },
       xAxis: {
-          title: {
-              text: 'Segmento'
-          }
+        title: {
+          text: 'Segmento da Educação'
+        }
       },
-      series: [
-          { name: $('select[name=ano]').val() }
-          /*{ name: 'VL_RECEITA_REALIZADA' },
-          { name: 'VL_RECEITA_ORCADA'},
-          { name: 'VL_DESPESA_EMPENHADA'},
-          { name: 'VL_DESPESA_PAGA'},
-          { name: 'VL_DESPESA_LIQUIDADA_EDUCACAO'}*/
-      ]
+      legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'middle'
+      },
+
+      responsive: {
+        rules: [{
+          condition: {
+              maxWidth: 500
+            },
+            chartOptions: {
+              legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom'
+              }
+            }
+          }
+        ]
+      }
     });
 
-
-      var seriesLength = graficos.series.length;
-      for(var i = seriesLength -1; i > -1; i--) {
-          graficos.series[i].remove();
-      }
+    // url para buscar os dados
+    // ano 0 selecionado significa "todos os anos"
+    var url = '';
+    if ($('select[name=ano]').val() == 0){  
+      url = '{{ url("/estimativas") }}/graficos/' + id_estado + '/'+id_modalidade;
+     
+      // adiciona as series existentes
+      graficos.addSeries({
+          name: 2015, 
+      }); 
       
       graficos.addSeries({
-          name: $('select[name=ano]').val() 
-      });
-  
+          name: 2016, 
+      }); 
 
-    // url para buscar os dados
-    var url = '{{ url("/estimativas") }}/graficos/' + id_estado + '/'+id_modalidade + '/' + ano;
+      graficos.addSeries({
+          name: 2017, 
+      }); 
+
+      graficos.addSeries({
+        name: 2018, 
+      }); 
+
+      graficos.addSeries({
+          name: 2019, 
+      }); 
+    } else {
+      url = '{{ url("/estimativas") }}/graficos/' + id_estado + '/'+id_modalidade + '/' + ano;
+      graficos.addSeries({
+          name: $('select[name=ano]').val(), 
+      }); 
+    }  
+
+    var categories = [];  
+    var anos = [];  
     
     $.ajax({
       type: 'GET',
@@ -110,6 +148,7 @@
       contentType: 'application/json',
       dataType: 'json',
     })
+   
     .done(function(data) {
       $.each( data, function( key, value ) {
         var label = value.segmento + ' / Educação '; 
@@ -126,12 +165,36 @@
         else if (value.tipo == 'C')
           label += 'Conveniada';
         
-        graficos.series[0].addPoint({y: parseFloat(value.valor), name: label});
+        if (!anos.includes(value.ano) )
+          anos.push(value.ano);
+        
+        if ($('select[name=ano]').val() == 0 ){
+          if (value.ano == 2015)
+            graficos.series[0].addPoint({y: parseFloat(value.valor), name: label});
+          if (value.ano == 2016)
+            graficos.series[1].addPoint({y: parseFloat(value.valor), name: label});
+          if (value.ano == 2017)
+            graficos.series[2].addPoint({y: parseFloat(value.valor), name: label});
+          if (value.ano == 2018)
+            graficos.series[3].addPoint({y: parseFloat(value.valor), name: label});
+          if (value.ano == 2019)
+            graficos.series[4].addPoint({y: parseFloat(value.valor), name: label});
+        } else {
+          graficos.series[0].addPoint({y: parseFloat(value.valor), name: label});
+        }
+
+        if (!categories.includes(label) )
+          categories.push(label);
+
       });
     });
+    console.log(anos);
+    console.log(categories);
+      
   }
 
   $(document).ready(function(){
+    $('select').formSelect();
     $('#estimativa').addClass('active');
     $('graficos').hide();
   });

@@ -35,23 +35,35 @@ class EstimativaController extends Controller {
         // se passou os tres parametros pela url, retorna o json para exibição via javascript
         if (isset($id_estado) && isset($id_modalidade) && isset($ano)) {
             return $estimativas = Estimativa::getEstimativas($id_estado, $ano, $id_modalidade); 
-        } else {
-            $estados = Estados::orderBy("nome", "ASC")->get();
-            $anos = Ano::orderBy("ano", "ASC")->get();
-            $modalidades = Modalidade::orderBy("nome", "ASC")->get();
-            $estimativas = Estimativa::getEstimativas(24, 2019); 
-            
-            return view("estimativa/grafico")->with([
-                "estimativas" => $estimativas, 
-                "estados" => $estados,
-                "modalidades" => $modalidades, 
-                "anos" => $anos
-            ]);
+        } 
+
+        if (isset($id_estado) && isset($id_modalidade) ) {
+            return $estimativas = Estimativa::getEstimativas($id_estado, NULL, $id_modalidade);
+            return "Passou estado e modalidade, o ano nao";
         }
+
+        $estados = Estados::orderBy("nome", "ASC")->get();
+        $anos = Ano::orderBy("ano", "ASC")->get();
+        $modalidades = Modalidade::orderBy("nome", "ASC")->get();
+        $estimativas = Estimativa::getEstimativas(24, 2019); 
+        
+        return view("estimativa/grafico")->with([
+            "estimativas" => $estimativas, 
+            "estados" => $estados,
+            "modalidades" => $modalidades, 
+            "anos" => $anos
+        ]);
+      
     }
 
     public function graficoComparacaoAnual(){
-        return $id_estado = request()->segment(3);
+        $id_estado = request()->segment(3);
+        $estados = Estados::orderBy("nome", "ASC")->get();
+        $modalidades = Modalidade::orderBy("nome", "ASC")->get();
+        return view ("estimativa/graficogeral")->with([
+            "estados" => $estados,
+            "modalidades" => $modalidades
+        ]);
        // return Estimativa::getEstimativasGeral($id_estado);
     }
 }
