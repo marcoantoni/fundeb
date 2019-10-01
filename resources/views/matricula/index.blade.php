@@ -12,7 +12,7 @@
 <form action="#">
   <div class="row">
     <div class="input-field col s12 m6">
-      <select id="estados" name="estados" class="browser-default">
+      <select id="estados" name="estados">
         <option value="" disabled selected>Escolha o estado</option>
         @foreach($estados AS $estado)
           <option value="{{ $estado->id }}">{{ $estado->nome }}</option>
@@ -20,7 +20,7 @@
       </select>
     </div>
     <div class="input-field col s12 m6">
-      <select id="municipios" name="municipios" class="browser-default">
+      <select id="municipios" name="municipios">
         <option value="" disabled selected>Escolha o municipio</option>
       </select>
       </div>
@@ -121,6 +121,8 @@
       $.each( data, function( key, value ) {
         $('#municipios').append('<option value="'+value.id+'">'+value.nome+'</option>');
       });
+      // reinicializando o select 
+      $('#municipios').formSelect();
     });
   });
 
@@ -209,6 +211,7 @@
     });
   }
   $(document).ready(function(){
+    $('select').formSelect();
     $('#matriculas').addClass('active');
     $('table').hide();
     $('#cards').hide();
