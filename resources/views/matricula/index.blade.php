@@ -11,7 +11,7 @@
 
 <form action="#">
   <div class="row">
-    <div class="input-field col s12 m6">
+    <div class="input-field col s12 m5">
       <select id="estados" name="estados">
         <option value="" disabled selected>Escolha o estado</option>
         @foreach($estados AS $estado)
@@ -19,12 +19,19 @@
         @endforeach
       </select>
     </div>
-    <div class="input-field col s12 m6">
+    <div class="input-field col s12 m5">
       <select id="municipios" name="municipios">
         <option value="" disabled selected>Escolha o municipio</option>
       </select>
-      </div>
     </div>
+    <div class="input-field col s12 m2">
+      <select id="ano" name="ano">
+        @foreach($anos AS $ano)
+          <option value="{{ $ano->ano }}">{{ $ano->ano }}</option>
+        @endforeach
+      </select>
+    </div>
+  </div>
 </form>
 <style>
   .card{height: 180px;}
@@ -44,6 +51,15 @@
         <div class="card-content white-text">
           <p>Ensino fundamental</p>
           <h4 id="matriculasedfundamental"></h4>
+          <p>Matrículas</p>
+        </div>
+      </div>
+    </div>
+    <div class="col s6 m2">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <p>Ensino médio</p>
+          <h4 id="matriculasensmedio"></h4>
           <p>Matrículas</p>
         </div>
       </div>
@@ -75,15 +91,6 @@
         </div>
       </div>
     </div>
-    <div class="col s6 m2">
-      <div class="card blue-grey darken-1">
-        <div class="card-content white-text">
-          <p>Estimativa receitas</p>
-          <h4 id="estimativareceitas"></h4>
-          <p>reais</p>
-        </div>
-      </div>
-    </div>
 </div>
 
 <table id="table" class="row-border">
@@ -105,7 +112,7 @@
     $('table').show();
     $('#tbody').empty();
     // busca os dados relativos ao estado
-    buscarDados($('select[name=estados]').val(), 'E');
+    buscarDados($('select[name=estados]').val(), 'E', $('select[name=ano]').val());
 
     $('#municipios').empty();
     $('#municipios').append('<option value="" disabled selected>Selecione</option>');
@@ -131,7 +138,18 @@
     $('table').show();
     $('#tbody').empty();
     // busca os dados relativos ao municipio selecionado
-    buscarDados($('select[name=municipios]').val(), 'M');
+    buscarDados($('select[name=municipios]').val(), 'M', $('select[name=ano]').val());
+  });
+
+  // ao selecionar o ano
+  $( '#ano' ).change(function() {
+    $('table').show();
+    $('#tbody').empty();
+    // busca os dados relativos ao municipio selecionado
+    if ($('select[name=municipios]').val() == null)
+      buscarDados($('select[name=estados]').val(), 'E', $('select[name=ano]').val());
+    else
+      buscarDados($('select[name=municipios]').val(), 'M', $('select[name=ano]').val());
   });
 
   /**
@@ -140,8 +158,8 @@
   * @param {char} cod         'E' refere-se a estado e 'M' municipio
   * @return {void}            
   */
-  function buscarDados(id, cod){
-    var url = '{{ url("/matricula") }}/' + id;;
+  function buscarDados(id, cod, ano){
+    var url = '{{ url("/matricula") }}/' + id + '/' + ano;
     if (cod === 'E'){
       url += '/estado';
     }
@@ -189,7 +207,7 @@
       $('#matriculasedfundamental').empty();
       $('#matriculasensmedio').empty();
       
-      var url = '{{ url("/matricula/indicadores") }}/' + id;
+      var url = '{{ url("/matricula/indicadores") }}/' + id + '/' + ano;
       if (cod === 'E')
         url += '/estado';
       

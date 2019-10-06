@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Ano;
 use App\Matriculas;
 use App\Estados;
 
@@ -11,7 +12,8 @@ class MatriculaController extends Controller {
 	
     public function index(){
 		$estados = Estados::orderBy("nome", "ASC")->get();
-		return view("matricula/index")->with(["estados" => $estados]);
+        $anos = Ano::orderBy("ano", "DESC")->get();
+		return view("matricula/index")->with(["estados" => $estados, "anos" => $anos]);
 	}
 
     /**
@@ -41,8 +43,8 @@ class MatriculaController extends Controller {
     * @param integer $id - primary key da tabela municipios
     * @return json
     */
-    public function getIndicadores($id){
-    	return Matriculas::getIndicadores($id);
+    public function getIndicadores($id, $ano){
+    	return Matriculas::getIndicadores($id, $ano);
     }
 
     /**
@@ -51,8 +53,8 @@ class MatriculaController extends Controller {
     * @param integer $id - primary key da tabela estados
     * @return json
     */
-    public function getIndicadoresEstado($id){
-        return Matriculas::getIndicadoresEstado($id);
+    public function getIndicadoresEstado($id, $ano){
+        return Matriculas::getIndicadoresEstado($id, $ano);
     }
 
 }

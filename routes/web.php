@@ -30,7 +30,7 @@ Route::get('estimativas/{id_estado}/ano/{ano}', 'EstimativaController@show');
 Route::get('despesa/relatorio/{id}', 'DespesaController@getRelatorio');
 
 Route::get('matricula', 'MatriculaController@index');
-Route::get('matricula/{id}', 'MatriculaController@getMatriculas');
-Route::get('matricula/{id_estado}/estado', 'MatriculaController@getMatriculasEstados');
-Route::get('matricula/indicadores/{id}', 'MatriculaController@getIndicadores');
-Route::get('matricula/indicadores/{id}/estado', 'MatriculaController@getIndicadoresEstado');
+Route::get('matricula/{id}/{ano}', 'MatriculaController@getMatriculas');
+Route::get('matricula/{id_estado}/{ano}/estado/', 'MatriculaController@getMatriculasEstados');
+Route::get('matricula/indicadores/{id}/{ano}', 'MatriculaController@getIndicadores');
+Route::get('matricula/indicadores/{id}/{ano}/estado/', 'MatriculaController@getIndicadoresEstado');
