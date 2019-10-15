@@ -11,22 +11,42 @@
 
 <form action="#">
   <div class="row">
-    <div class="input-field col s12 m6">
-      <select id="estados" name="estados" class="browser-default">
+    <div class="input-field col s12 m4">
+      <select id="estados" name="estados">
         <option value="" disabled selected>Escolha o estado</option>
         @foreach($estados AS $estado)
           <option value="{{ $estado->id }}">{{ $estado->nome }}</option>
         @endforeach
       </select>
+      <label>Estado</label>
     </div>
-    <div class="input-field col s12 m6">
-      <select id="ano" name="ano" class="browser-default">
+    <div class="input-field col s12 m2">
+      <select id="ano" name="ano">
         @foreach($anos AS $ano)
           <option value="{{$ano->ano}}">{{$ano->ano}}</option>
         @endforeach
       </select>
-      </div>
+      <label>Ano</label>
     </div>
+  	<div class="input-field col s12 m2">
+  	  <label>
+          <input type="checkbox" name="escolapublica" checked="checked" />
+          <span>Escola pública</span>
+        </label>
+  	</div>
+  	<div class="input-field col s12 m2">
+  	  <label>
+          <input type="checkbox" name="escolaconveniada" checked="checked" />
+          <span>Escola conveniada</span>
+        </label>
+  	</div>
+  	<div class="input-field col s12 m2">
+  	  <label>
+          <input type="checkbox" name="escolarural" checked="checked" />
+          <span>Escola Rural</span>
+        </label>
+  	</div>
+  </div>
 </form>
 
 <table id="table" class="row-border">
@@ -43,6 +63,8 @@
 
   <tbody id="tbody"></tbody>
 </table>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<div id="graficos"></div>
 <script>
   // ao selecionar o estado
   // busca as cidades deste estado e adiciona ao select
@@ -68,8 +90,9 @@
   */
   function buscarDados(id_estado, ano){
     
-    var url = '{{ url("/estimativas") }}/' + id_estado + '/ano/' + ano;    
-    console.log('url: ' + url);
+    var url = '{{ url("/estimativas") }}/' + id_estado + '/ano/' + ano;
+    console.log(url);
+
     $.ajax({
       type: 'GET',
       url: url,
@@ -77,10 +100,8 @@
       dataType: 'json',
     })
     .done(function(data) {
-      console.log('ajax sucess');
-      console.log('dados' + data);
       $.each( data, function( key, value ) {
-        var linha = '<tr>';
+        var linha = '<tr class="' + value.tipo + ' ' + value.educacao + '">';
         linha += '<td>' + value.modalidade + '</td>';
         linha += '<td>' + value.segmento + '</td><td>';
 
@@ -106,10 +127,37 @@
         linha += '</tr>';
 
         $('#table tbody').append(linha);
-      });  
+      });
     });
   }
+  
+  // controle na exibição dos dados
+  $('input[type="checkbox"][name="escolapublica"]').change(function() {
+  	$('.P').hide();
+  	
+  	if(this.checked) {
+  		$('.P').show();
+    }
+  });
+
+  $('input[type="checkbox"][name="escolaconveniada"]').change(function() {
+  	$('.C').hide();
+  	
+  	if(this.checked) {
+  		$('.C').show();
+    }
+  });
+
+  $('input[type="checkbox"][name="escolarural"]').change(function() {
+  	$('.R').hide();
+  	
+  	if(this.checked) {
+  		$('.R').show();
+    }
+  });
+
   $(document).ready(function(){
+    $('select').formSelect();
     $('#estimativa').addClass('active');
     $('table').hide();
   });

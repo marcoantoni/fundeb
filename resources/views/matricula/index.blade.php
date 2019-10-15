@@ -11,7 +11,7 @@
 
 <form action="#">
   <div class="row">
-    <div class="input-field col s12 m5">
+    <div class="input-field col s12 m2">
       <select id="estados" name="estados">
         <option value="" disabled selected>Escolha o estado</option>
         @foreach($estados AS $estado)
@@ -19,17 +19,35 @@
         @endforeach
       </select>
     </div>
-    <div class="input-field col s12 m5">
+    <div class="input-field col s12 m3">
       <select id="municipios" name="municipios">
         <option value="" disabled selected>Escolha o municipio</option>
       </select>
     </div>
-    <div class="input-field col s12 m2">
+    <div class="input-field col s12 m1">
       <select id="ano" name="ano">
         @foreach($anos AS $ano)
           <option value="{{ $ano->ano }}">{{ $ano->ano }}</option>
         @endforeach
       </select>
+    </div>
+    <div class="input-field col s12 m2">
+      <label>
+        <input type="checkbox" name="escolapublica" checked="checked" />
+        <span>Escola pública</span>
+      </label>
+    </div>
+    <div class="input-field col s12 m2">
+      <label>
+        <input type="checkbox" name="escolaconveniada" checked="checked" />
+        <span>Escola conveniada</span>
+      </label>
+    </div>
+    <div class="input-field col s12 m2">
+      <label>
+        <input type="checkbox" name="escolarural" checked="checked" />
+        <span>Escola Rural</span>
+      </label>
     </div>
   </div>
 </form>
@@ -172,7 +190,7 @@
     })
     .done(function(data) {
       $.each( data, function( key, value ) {
-        var linha = '<tr>';
+        var linha = '<tr class="' + value.tipo + ' ' + value.educacao + '">';
         linha += '<td>' + value.nome + '</td>';
         linha += '<td>' + value.quantidade + '</td><td>';
 
@@ -218,16 +236,46 @@
           dataType: 'json',
       })
       .done(function(data) {
-        $('#cards').show();
-        $('#matriculasaee').append(data[0].quantidade);
-        $('#matriculasedespecial').append(data[1].quantidade);
-        $('#matriculasedinfantil').append(data[3].quantidade);
-        $('#matriculaseja').append(data[4].quantidade);
-        $('#matriculasedfundamental').append(data[5].quantidade);
-        $('#matriculasensmedio').append(data[6].quantidade);
+        if (data.length > 0 ) {
+          $('#cards').show(); 
+          $('#matriculasaee').append(data[0].quantidade);
+          $('#matriculasedespecial').append(data[1].quantidade);
+          $('#matriculasedinfantil').append(data[3].quantidade);
+          $('#matriculaseja').append(data[4].quantidade);
+          $('#matriculasedfundamental').append(data[5].quantidade);
+          $('#matriculasensmedio').append(data[6].quantidade);
+        } else {
+          alert('A consulta não retornou nenhum resultado');
+        }
       });
     });
   }
+
+  // controle na exibição dos dados
+  $('input[type="checkbox"][name="escolapublica"]').change(function() {
+    $('.P').hide();
+    
+    if(this.checked) {
+      $('.P').show();
+    }
+  });
+
+  $('input[type="checkbox"][name="escolaconveniada"]').change(function() {
+    $('.C').hide();
+    
+    if(this.checked) {
+      $('.C').show();
+    }
+  });
+
+  $('input[type="checkbox"][name="escolarural"]').change(function() {
+    $('.R').hide();
+    
+    if(this.checked) {
+      $('.R').show();
+    }
+  });
+
   $(document).ready(function(){
     $('select').formSelect();
     $('#matriculas').addClass('active');
