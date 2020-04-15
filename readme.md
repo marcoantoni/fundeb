@@ -7,10 +7,10 @@ Aplicação web para visualização de dados extraidos do FUNDB através dos dad
 git clone https://github.com/marcoantoni/fundeb.git && cd fundeb
 ```
 
-Para criar e importar o banco de dados junto com os dados execute os seguintes comandos. Substitua o USER pelo usuário do Mysql. 
+Para criar e importar o banco de dados junto com os dados execute os seguintes comandos. Substitua o USER pelo usuário do Mysql. Perceba que existem duas pastas database. Com letras minúsculas refere-se a pasta do framework enquanto com letras maiúsculas refere-se aos dados.
 ```sh
 mysql -uUSER -p -e "create database fundeb";
-mysql -uUSER -p -D testdb < database/fundeb.sql
+mysql -uUSER -p -D testdb < DATABASE/fundeb.sql
 ```
 
 ### Instalando o Laravel
